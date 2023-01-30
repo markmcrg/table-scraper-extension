@@ -1,0 +1,20 @@
+{
+    "name": "Leaderboard Scraper",
+    "version": "1.0",
+    "description": "Extracts data from tables in webpages and exports it to a CSV File",
+    "manifest_version": 2,
+    "permissions": [
+        "activeTab",
+        "storage",
+        "webNavigation"
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },   
+    "content_scripts": [
+        {
+          "matches": ["https://*/*"],
+          "js": ["./scripts/contentScript.js"]
+        }
+      ]
+}
