@@ -1,10 +1,9 @@
+var rowCounter = 0;
 // Listen for messages from popup.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type === 'scrape') {
       exportTableToCSV()
-      console.log(csv);
-      console.log(csvContent);
-      console.log('scraped!');
+      chrome.runtime.sendMessage({type: "rowCount", value: rowCounter});
     }
     else if (request.type === 'download') {
       downloadCSV(csvContent, 'table');
@@ -17,10 +16,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   });
 
 // Reset CSV variables
-function resetCSV()
-{
+function resetCSV() {
   csv = [];
   csvContent = [];
+  rowCounter = 0;
+
+  // Send message to popup.js
+  chrome.runtime.sendMessage({type: "reset-complete"});
 }
 
 // Download csv array passed in as a parameter
@@ -48,6 +50,9 @@ function downloadCSV(csv, filename) {
 
   // Click download link
   downloadLink.click();
+
+  // Send message to popup.js
+  chrome.runtime.sendMessage({type: "download-complete"});
 }
 
 var csvContent;
@@ -63,13 +68,14 @@ function exportTableToCSV() {
 
     for (var j = 0; j < cols.length; j++) {
       if (j === 0 && i < 3 && cols[j].innerText == '') {
-        cols[j].innerText = colCounter;
-        colCounter++;
+        row.push(colCounter)
       }
-      if (cols[j].innerText.indexOf(",") !== -1) {
-        cols[j].innerText = '"' + cols[j].innerText + '"';
+      else if (cols[j].innerText.indexOf(",") !== -1) {
+        row.push('"' + cols[j].innerText + '"')
       }
+      else {
       row.push(cols[j].innerText);
+      }
     }
     csv.push(row.join(","));
   }
@@ -81,5 +87,9 @@ function exportTableToCSV() {
   }
 
   csvContent = csv.join("\n")
+  console.log(rows.length + ' rows exported to CSV array!')
 
+  // Send number of rows to popup.js
+  chrome.runtime.sendMessage({type: "number", value: rows.length});
+  rowCounter += rows.length;
 }
