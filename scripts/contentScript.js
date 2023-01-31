@@ -25,29 +25,29 @@ function resetCSV()
 
 // Download csv array passed in as a parameter
 function downloadCSV(csv, filename) {
-    var csvFile;
-    var downloadLink;
+  var csvFile;
+  var downloadLink;
 
-    // CSV file
-    csvFile = new Blob([csv], {type: "text/csv"});
+  // CSV file
+  csvFile = new Blob([csv], {type: "text/csv"});
 
-    // Download link
-    downloadLink = document.createElement("a");
+  // Download link
+  downloadLink = document.createElement("a");
 
-    // File name
-    downloadLink.download = filename;
+  // File name
+  downloadLink.download = filename;
 
-    // Create a link to the file
-    downloadLink.href = window.URL.createObjectURL(csvFile);
+  // Create a link to the file
+  downloadLink.href = window.URL.createObjectURL(csvFile);
 
-    // Hide download link
-    downloadLink.style.display = "none";
+  // Hide download link
+  downloadLink.style.display = "none";
 
-    // Add the link to DOM
-    document.body.appendChild(downloadLink);
+  // Add the link to DOM
+  document.body.appendChild(downloadLink);
 
-    // Click download link
-    downloadLink.click();
+  // Click download link
+  downloadLink.click();
 }
 
 var csvContent;
@@ -55,29 +55,31 @@ var csv = [];
 
 // Export table to a CSV array
 function exportTableToCSV() {  
-var rows = document.querySelectorAll("tbody tr");
-var colCounter = 1;
+  var rows = document.querySelectorAll("tbody tr");
+  var colCounter = 1;
 
-for (var i = 0; i < rows.length; i++) {
-  var row = [], cols = rows[i].querySelectorAll("td");
+  for (var i = 0; i < rows.length; i++) {
+    var row = [], cols = rows[i].querySelectorAll("td");
 
-  for (var j = 0; j < cols.length; j++) {
-    if (j === 0 && i < 3 && cols[j].innerText == '') {
-      cols[j].innerText = colCounter;
-      colCounter++;
+    for (var j = 0; j < cols.length; j++) {
+      if (j === 0 && i < 3 && cols[j].innerText == '') {
+        cols[j].innerText = colCounter;
+        colCounter++;
+      }
+      if (cols[j].innerText.indexOf(",") !== -1) {
+        cols[j].innerText = '"' + cols[j].innerText + '"';
+      }
+      row.push(cols[j].innerText);
     }
-    row.push(cols[j].innerText);
+    csv.push(row.join(","));
   }
 
-  csv.push(row.join(","));
-}
+  for (var i = 0; i < csv.length; i++) {
+    if (csv[i].length >= 2 && csv[i][1] === "\n") {
+      csv[i] = csv[i].substring(2);
+  }
+  }
 
-for (var i = 0; i < csv.length; i++) {
-  if (csv[i].length >= 2 && csv[i][1] === "\n") {
-    csv[i] = csv[i].substring(2);
-}
-}
-
-csvContent = csv.join("\n")
+  csvContent = csv.join("\n")
 
 }
