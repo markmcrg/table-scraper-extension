@@ -1,5 +1,6 @@
 var rowCounter = 0;
 var rowsLength = 0;
+var isStart = true;
 // Listen for messages from popup.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type === 'scrape') {
@@ -27,7 +28,7 @@ function resetCSV() {
   csv = [];
   csvContent = [];
   rowCounter = 0;
-
+  isStart = true;
   // Send message to popup.js
   chrome.runtime.sendMessage({type: "reset-complete"});
 }
@@ -67,6 +68,16 @@ var csv = [];
 
 // Export table to a CSV array
 function exportTableToCSV() {  
+  var header = document.querySelectorAll("thead th");
+  if(isStart) {
+    var headerArray = []
+    for (var i = 0; i < header.length; i++) { 
+      headerArray.push(header[i].innerText)
+    }
+    csv.push(headerArray.join(","))
+    isStart = false;
+  }
+
   var rows = document.querySelectorAll("tbody tr");
   var colCounter = 1;
 
