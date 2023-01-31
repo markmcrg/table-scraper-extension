@@ -2,17 +2,21 @@
 <html>
   <head>
     <title>Table Scraper</title>
-    <link rel="stylesheet" type="text/css" href="popup.css">
+    <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.css">
   </head>
   <body>
-    <h1>Table Scraper</h1>
-    <button class="btn" id="scrape-button">Scrape Table</button>
-    <div id="number-display"></div>
-    <div id="total-rows"></div>
-    <button class="btn" id="download-button">Download CSV</button>
-    <div id="download-display"></div>
-    <button class="btn" id="reset-button">Reset</button>
-    <div id="reset-display"></div>
+    <h5 class="mt-3 text-center">Table Scraper</h5>
+    <div class="btn-group-vertical m-2" role="group" aria-label="Vertical button group">
+      <button type="button" class="btn btn-outline-success text-nowrap" id="scrape-button">Scrape Table</button>
+      <button type="button" class="btn btn-outline-success text-nowrap" id="download-button">Download CSV</button>
+      <button type="button" class="btn btn-outline-success text-nowrap" id="reset-button">Reset</button>
+    </div>
+    
+    <div id="alert-box" class="d-flex justify-content-center mt-2">
+      <div id ="display-box" class="alert alert-success text-center">
+      </div>
+    </div>
+
     <script src="./scripts/popup.js"></script>
   </body>
 </html>

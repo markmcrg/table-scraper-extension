@@ -1,9 +1,16 @@
 var rowCounter = 0;
+var rowsLength = 0;
 // Listen for messages from popup.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type === 'scrape') {
+      rowsLength = 0;
       exportTableToCSV()
-      chrome.runtime.sendMessage({type: "rowCount", value: rowCounter});
+      chrome.runtime.sendMessage({
+        type: "numberAndRowCount", 
+        numberValue: rowsLength, 
+        rowCountValue: rowCounter
+      });
+      console.log('received')
     }
     else if (request.type === 'download') {
       downloadCSV(csvContent, 'table');
@@ -90,6 +97,6 @@ function exportTableToCSV() {
   console.log(rows.length + ' rows exported to CSV array!')
 
   // Send number of rows to popup.js
-  chrome.runtime.sendMessage({type: "number", value: rows.length});
+  rowsLength = rows.length;
   rowCounter += rows.length;
 }
