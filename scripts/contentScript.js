@@ -69,6 +69,7 @@ var csv = [];
 // Export table to a CSV array
 function exportTableToCSV() {  
   var header = document.querySelectorAll("thead th");
+  // Scrape column names only if it's the first time scraping
   if(isStart) {
     var headerArray = []
     for (var i = 0; i < header.length; i++) { 
